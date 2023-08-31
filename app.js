@@ -4,6 +4,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const dotenv = require('dotenv');
+const indexRouter = require("./routes/catalog");
 const catalogRouter = require("./routes/catalog");
 const compression = require("compression");
 const helmet = require("helmet");
@@ -21,7 +22,7 @@ app.use(
 
 const limiter = RateLimit({
   windowMs: 1 * 60 * 1000,
-  max: 20,
+  max: 30,
 });
 app.use(limiter);
 
@@ -46,6 +47,7 @@ app.use(cookieParser());
 app.use(compression());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use("/", indexRouter);
 app.use("/catalog", catalogRouter);
 
 app.use(function(req, res, next) {
